@@ -27,19 +27,14 @@ def parse(lump):
     return [parse_msg(s) for s in splits[:-1] if s], splits[-1]
 
 def parse_msg(s):
-    pre = ""
-    if s.startswith(":"):
-        end_of_pre = s.find(" ")
-        if end_of_pre == -1:
-            return None
-        pre = s[1:end_of_pre]
-        s = s[end_of_pre + 1:]
-
-    end_of_cmd = s.find(" ")
-    if end_of_cmd == -1:
+    try:
+        if s.startswith(":"):
+            pre, s = s[1:].split(" ", 1)
+        else:
+            pre = ""
+        cmd, s = s.split(" ", 1)
+    except ValueError:          # from the splits
         return None
-    cmd = s[:end_of_cmd]
-    s = s[end_of_cmd + 1:]
 
     argstring, _, trail = s.partition(":")
     return pircocet.backend.Msg(pre=pre, cmd=cmd, args=argstring.split(), trail=trail)
