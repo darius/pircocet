@@ -45,15 +45,11 @@ def parse_msg(s):
     return pircocet.backend.Msg(pre=pre, cmd=cmd, args=argstring.split(), trail=trail)
 
 def unparse(msg):
-    s = ""
-    if msg.frm:
-        s += ":" + msg.frm
-    s += " " + msg.cmd
-    if msg.args:
-        s += " " + " ".join(msg.args)
-    if msg.trail:
-        s += " :" + msg.trail
-    return s
+    def part(pre, s): return pre+s if s else ''
+    return '%s %s%s%s' % (part(":", msg.frm),
+                          part(" ", msg.cmd),
+                          part(" ", " ".join(msg.args)),
+                          part(" :", msg.trail))
 
 class Client(object):
     def __init__(self, conn):
