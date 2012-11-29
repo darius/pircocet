@@ -2,7 +2,7 @@ import collections
 
 names = {}
 def register(name, client):
-    if names.get(name):
+    if name in names:
         raise Exception("Nick taken")
     else:
         names[name] = client

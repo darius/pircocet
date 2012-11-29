@@ -9,6 +9,10 @@ register("matt", matt)
 margo = pircocet.shell.Client("margo")
 register("margo", margo)
 
+try: register("alan", margo)   # same nick twice should fail
+except Exception: pass
+else: assert False
+
 alan.send_msg("#hs", Msg(frm=alan, cmd="JOIN", args=["#hs"], trail=""))
 matt.send_msg("#hs", Msg(frm=matt, cmd="JOIN", args=["#hs"], trail=""))
 margo.send_msg("#hs", Msg(frm=margo, cmd="JOIN", args=["#hs"], trail=""))
