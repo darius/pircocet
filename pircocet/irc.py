@@ -24,7 +24,7 @@ def serve(address="0.0.0.0", port=6667):
 
 def parse(lump):
     splits = lump.split("\r\n")
-    return filter(None, [parse_msg(s) for s in splits[:-1]]), splits[-1]
+    return [parse_msg(s) for s in splits[:-1] if s], splits[-1]
 
 def parse_msg(s):
     pre = ""

@@ -24,6 +24,7 @@ class Channel(object):
     def recv_msg(self, msg):
         if msg.cmd == "JOIN":
             self.clients.append(msg.frm)
+            # XXX add: for c in self.clients: c.recv_msg(msg)?
         elif msg.cmd == "PRIVMSG":
             for c in [c for c in self.clients if c != msg.frm]:
                 c.recv_msg(msg)
