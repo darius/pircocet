@@ -11,7 +11,7 @@ def send(name, msg):
     if recipient:
         recipient.recv_msg(msg)
     else:
-        if msg['cmd'] == "JOIN":
+        if msg.cmd == "JOIN":
             names[name] = Channel(name)
             names[name].recv_msg(msg)
         else:
@@ -22,12 +22,14 @@ class Channel(object):
         self.nick = nick
         self.clients = []
     def recv_msg(self, msg):
-        if msg['cmd'] == "JOIN":
-            self.clients.append(msg['frm'])
-        elif msg['cmd'] == "PRIVMSG":
-            for c in [c for c in self.clients if c != msg['frm']]:
+        if msg.cmd == "JOIN":
+            self.clients.append(msg.frm)
+        elif msg.cmd == "PRIVMSG":
+            for c in [c for c in self.clients if c != msg.frm]:
                 c.recv_msg(msg)
         else:
-            raise Exception("Unknown command", msg['cmd'])
+            raise Exception("Unknown command", msg.cmd)
 
-Msg = lambda **kwargs: kwargs
+class Msg:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)

@@ -46,13 +46,13 @@ def parse_msg(s):
 
 def unparse(msg):
     s = ""
-    if msg['frm']:
-        s += ":" + msg['frm']
-    s += " " + msg['cmd']
-    if msg['args']:
-        s += " " + " ".join(msg['args'])
-    if msg['trail']:
-        s += " :" + msg['trail']
+    if msg.frm:
+        s += ":" + msg.frm
+    s += " " + msg.cmd
+    if msg.args:
+        s += " " + " ".join(msg.args)
+    if msg.trail:
+        s += " :" + msg.trail
     return s
 
 class Client(object):
@@ -60,16 +60,16 @@ class Client(object):
         self.buf = ""
         self.conn = conn
     def handle(self, msg):
-        if msg['cmd'] == "NICK":
-            nick = msg['args'][0]
+        if msg.cmd == "NICK":
+            nick = msg.args[0]
             pircocet.backend.register(nick, self)
             self.nick = nick
-        elif msg['cmd'] == "PRIVMSG":
-            self.send_msg(msg['args'][0], msg)
+        elif msg.cmd == "PRIVMSG":
+            self.send_msg(msg.args[0], msg)
         else:
-            raise Exception("Unknown command", msg['cmd'])
+            raise Exception("Unknown command", msg.cmd)
     def send_msg(self, name, msg):
-        msg['frm'] = self
+        msg.frm = self
         return pircocet.backend.send(name, msg)
     def recv_msg(self, msg):
         print "%s <-- %s" % (self.nick, msg)
